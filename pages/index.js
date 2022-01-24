@@ -39,7 +39,7 @@ function Title(props) {
             <Tag>{props.children}</Tag>
             <style jsx>{`
                 ${Tag} {
-                    color: ${appConfig.theme.colors.neutrals['900']};
+                    color: ${appConfig.theme.colors.neutrals['000']};
                     font-size: 24px;
                     font-weight: 600
                 }
@@ -70,8 +70,7 @@ export default function PaginaInicial() {
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backgroundColor: appConfig.theme.colors.primary[500],
-          backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)',
+          backgroundImage: 'url(https://image.freepik.com/fotos-gratis/conceito-de-transformacao-digital-de-fundo-de-cerebro-de-tecnologia-de-ia_53876-124672.jpg)',
           backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
         }}
       >
