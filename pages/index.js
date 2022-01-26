@@ -1,6 +1,7 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import appConfig from '../config.json';
 
+
 function GlobalStyle() {
   return (
     <style global jsx>{`
@@ -32,14 +33,13 @@ function GlobalStyle() {
 
 
 function Title(props) {
-    console.log(props);
     const Tag = props.tag || 'h1';
     return (
         <>
             <Tag>{props.children}</Tag>
             <style jsx>{`
                 ${Tag} {
-                    color: ${appConfig.theme.colors.neutrals['000']};
+                    color: ${appConfig.theme.colors.futuristic["000"]};
                     font-size: 24px;
                     font-weight: 600
                 }
@@ -70,7 +70,7 @@ export default function PaginaInicial() {
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backgroundImage: 'url(https://image.freepik.com/fotos-gratis/conceito-de-transformacao-digital-de-fundo-de-cerebro-de-tecnologia-de-ia_53876-124672.jpg)',
+          backgroundImage: 'url(/background-circuit-diagram-with-glowing-line-lights.jpg)',
           backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
         }}
       >
@@ -84,9 +84,13 @@ export default function PaginaInicial() {
               sm: 'row',
             },
             width: '100%', maxWidth: '700px',
-            borderRadius: '5px', padding: '32px', margin: '16px',
-            boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
-            backgroundColor: appConfig.theme.colors.neutrals[700],
+            borderRadius: '4px', 
+            padding: '32px', margin: '16px',
+            background: "linear-gradient(127deg, " 
+              + appConfig.theme.colors.futuristic['005'] + ", " 
+              + appConfig.theme.colors.futuristic['006'] + ")",
+            boxShadow: '-4px -4px 12px ' + appConfig.theme.colors.futuristic['005'] 
+                    + ', 4px 4px 12px ' + appConfig.theme.colors.futuristic['007'] + '',
           }}
         >
           {/* Formulário */}
@@ -98,18 +102,18 @@ export default function PaginaInicial() {
             }}
           >
             <Title tag="h2">Boas vindas de volta!</Title>
-            <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
-              {appConfig.name}
+            <Text variant="body2" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.futuristic['000'] }}>
+              {appConfig.name} - By <Link href={`https://github.com/${username}`}>{username}</Link>
             </Text>
 
             <TextField
               fullWidth
               textFieldColors={{
                 neutral: {
-                  textColor: appConfig.theme.colors.neutrals[200],
-                  mainColor: appConfig.theme.colors.neutrals[900],
-                  mainColorHighlight: appConfig.theme.colors.primary[500],
-                  backgroundColor: appConfig.theme.colors.neutrals[800],
+                  textColor: appConfig.theme.colors.futuristic['001'], 
+                  mainColor: appConfig.theme.colors.futuristic['003'], 
+                  mainColorHighlight: appConfig.theme.colors.futuristic['001'],
+                  backgroundColor:  appConfig.theme.colors.futuristic['008'],
                 },
               }}
             />
@@ -117,11 +121,17 @@ export default function PaginaInicial() {
               type='submit'
               label='Entrar'
               fullWidth
-              buttonColors={{
-                contrastColor: appConfig.theme.colors.neutrals["000"],
-                mainColor: appConfig.theme.colors.primary[500],
-                mainColorLight: appConfig.theme.colors.primary[400],
-                mainColorStrong: appConfig.theme.colors.primary[600],
+              styleSheet={{
+                color: appConfig.theme.colors.futuristic['001'],
+                backgroundColor: appConfig.theme.colors.futuristic['003'],
+                hover: {
+                  color: appConfig.theme.colors.futuristic['000'],
+                  backgroundColor: appConfig.theme.colors.futuristic['001']
+                },
+                focus: {
+                  color: appConfig.theme.colors.futuristic['000'],
+                  backgroundColor: appConfig.theme.colors.futuristic['001']
+                },
               }}
             />
           </Box>
@@ -136,10 +146,9 @@ export default function PaginaInicial() {
               alignItems: 'center',
               maxWidth: '200px',
               padding: '16px',
-              backgroundColor: appConfig.theme.colors.neutrals[800],
-              border: '1px solid',
-              borderColor: appConfig.theme.colors.neutrals[999],
-              borderRadius: '10px',
+              borderRadius: '4px',
+              boxShadow: '-2px -2px 12px ' + appConfig.theme.colors.futuristic['005'] 
+                      + ', 2px 2px 12px ' + appConfig.theme.colors.futuristic['007'] + '',
               flex: 1,
               minHeight: '240px',
             }}
@@ -154,13 +163,17 @@ export default function PaginaInicial() {
             <Text
               variant="body4"
               styleSheet={{
-                color: appConfig.theme.colors.neutrals[200],
-                backgroundColor: appConfig.theme.colors.neutrals[900],
+                color: appConfig.theme.colors.futuristic['001'],
+                backgroundColor: appConfig.theme.colors.futuristic['004'],
                 padding: '3px 10px',
                 borderRadius: '1000px'
               }}
             >
-              {username}
+              <Link 
+                href={`https://github.com/${username}`}
+              >
+                {username}
+              </Link>
             </Text>
           </Box>
           {/* Photo Area */}
