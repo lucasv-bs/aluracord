@@ -49,19 +49,22 @@ function Title(props) {
 }
 
 
-// function HomePage() {
-//   return (
-//     <div>
-//         <GlobalStyle />
-//         <Title tag="h1">Boas vindas de volta!</Title>
-//         <h2>Discord - Alura Matrix</h2>        
-//     </div>    
-//   )
-// }
+function Link(props) {
+  return (    
+    <>
+      <a href={props.href}>{props.children}</a>
+      <style jsx>{`
+        a {
+          color: ${appConfig.theme.colors.futuristic["001"]};
+          text-decoration: none
+        }
+      `}</style>
+    </>
+  );
+}
 
-// export default HomePage
 
-export default function PaginaInicial() {
+export default function HomePage() {
   const username = 'lucasv-bs';
 
   return (
