@@ -166,6 +166,11 @@ export default function HomePage() {
           {/* Photo Area */}
         </Box>
       </Box>
+      {/* 
+        ***** Image credits *****
+        Background: <a href='https://br.freepik.com/fotos-vetores-gratis/fundo'>Fundo vetor criado por starline - br.freepik.com</a>
+        Photo Area: <a href='https://br.freepik.com/fotos-vetores-gratis/tecnologia'>Tecnologia vetor criado por upklyak - br.freepik.com</a>
+      */}
     </>
   );
 }
