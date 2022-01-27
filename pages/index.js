@@ -74,7 +74,7 @@ export default function HomePage() {
             as="form"
             onSubmit={function (event) {
               event.preventDefault();
-              router.push('/chat');
+              router.push(`/chat${username.length < 3 ? '' : '?username=' + username}`);
             }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -112,6 +112,7 @@ export default function HomePage() {
               label='Entrar'
               fullWidth
               styleSheet={{
+                display: username.length < 3 ? 'none' : 'block',
                 color: appConfig.theme.colors.futuristic['001'],
                 backgroundColor: appConfig.theme.colors.futuristic['003'],
                 hover: {
