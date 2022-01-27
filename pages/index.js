@@ -38,6 +38,7 @@ function Link(props) {
 
 export default function HomePage() {
   const [username, setUsername] = React.useState('');
+  const [userData, setUserData] = React.useState('');
   const router = useRouter();
 
   return (
@@ -90,7 +91,11 @@ export default function HomePage() {
             <TextField
               value={username} 
               onChange={function (event) {
-                setUsername(event.target.value);
+                const textValue = event.target.value;
+                setUsername(textValue);
+                fetch(`https://api.github.com/users/${textValue}`)
+                  .then(response => response.json())
+                  .then(data => { console.log(data); setUserData(data) });
               }}
               fullWidth
               textFieldColors={{
@@ -129,7 +134,7 @@ export default function HomePage() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              maxWidth: '200px',
+              maxWidth: '250px',
               padding: '16px',
               borderRadius: '4px',
               boxShadow: '-2px -2px 12px ' + appConfig.theme.colors.futuristic['005'] 
@@ -142,6 +147,7 @@ export default function HomePage() {
               styleSheet={{
                 borderRadius: username.length < 3 ? '0' : '50%',
                 marginBottom: '16px',
+                maxWidth: '200px',
               }}
               src={username.length < 3 ? '/hello-robot.png' : `https://github.com/${username}.png`}
             />
@@ -162,6 +168,56 @@ export default function HomePage() {
                 </Link>
               }
             </Text>
+            {userData.login !== "" ? 
+              '' : 
+              <>
+                <Text
+                  variant="body4"
+                  styleSheet={{
+                    marginTop: '5px',
+                    color: appConfig.theme.colors.futuristic['001'],
+                    backgroundColor: appConfig.theme.colors.futuristic['004'],
+                    padding: '3px 10px',
+                    borderRadius: '1000px'
+                  }}
+                >
+                  {userData.location ? userData.location : 'Sem localização'}
+                </Text>
+                <Box
+                  styleSheet={{
+                    display: 'flex',
+                    justifyContent: 'space-around',
+                    // marginTop: '5px',
+                    width: '100%',
+                  }}
+                >
+                  <Text
+                    variant="body4"
+                    styleSheet={{
+                      marginTop: '5px',
+                      color: appConfig.theme.colors.futuristic['001'],
+                      backgroundColor: appConfig.theme.colors.futuristic['004'],
+                      padding: '3px 10px',
+                      borderRadius: '1000px'
+                    }}
+                  >
+                    Followers {userData.followers}
+                  </Text>
+                  <Text
+                    variant="body4"
+                    styleSheet={{
+                      marginTop: '5px',
+                      color: appConfig.theme.colors.futuristic['001'],
+                      backgroundColor: appConfig.theme.colors.futuristic['004'],
+                      padding: '3px 10px',
+                      borderRadius: '1000px'
+                    }}
+                  >
+                    Following {userData.following}
+                  </Text>
+                </Box>                
+              </>
+            }
           </Box>
           {/* Photo Area */}
         </Box>
