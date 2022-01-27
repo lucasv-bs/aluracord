@@ -1,4 +1,5 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
+import React from 'react';
 import appConfig from '../config.json';
 
 
@@ -65,11 +66,11 @@ function Link(props) {
 
 
 export default function HomePage() {
-  const username = 'lucasv-bs';
+  const [username, setUsername] = React.useState('');
+  const router = useRouter();
 
   return (
     <>
-      <GlobalStyle />
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -99,17 +100,27 @@ export default function HomePage() {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={function (event) {
+              event.preventDefault();
+              router.push('/chat');
+            }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
             }}
           >
-            <Title tag="h2">Boas vindas de volta!</Title>
-            <Text variant="body2" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.futuristic['000'] }}>
-              {appConfig.name} - By <Link href={`https://github.com/${username}`}>{username}</Link>
+            <Title tag="h2">{appConfig.name}</Title>
+            <Text 
+              variant="body2" 
+              styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.futuristic['000'] }}>
+              Olá, de novo {username.length < 3 ? '' : <Link href={`https://github.com/${username}`}>{username}</Link>}
             </Text>
 
             <TextField
+              value={username} 
+              onChange={function (event) {
+                setUsername(event.target.value);
+              }}
               fullWidth
               textFieldColors={{
                 neutral: {
@@ -158,10 +169,10 @@ export default function HomePage() {
           >
             <Image
               styleSheet={{
-                borderRadius: '50%',
+                borderRadius: username.length < 3 ? '0' : '50%',
                 marginBottom: '16px',
               }}
-              src={`https://github.com/${username}.png`}
+              src={username.length < 3 ? '/hello-robot.png' : `https://github.com/${username}.png`}
             />
             <Text
               variant="body4"
@@ -172,11 +183,13 @@ export default function HomePage() {
                 borderRadius: '1000px'
               }}
             >
-              <Link 
-                href={`https://github.com/${username}`}
-              >
-                {username}
-              </Link>
+              {username.length < 3 ? 'Informe seu user' :
+                <Link 
+                  href={`https://github.com/${username}`}
+                >
+                  {username}
+                </Link>
+              }
             </Text>
           </Box>
           {/* Photo Area */}
