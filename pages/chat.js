@@ -2,26 +2,58 @@ import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import { useRouter } from 'next/router';
 import appConfig from '../config.json';
+import { createClient } from '@supabase/supabase-js';
 
 
-export default function ChatPage() {    
+export const getServerSideProps = async () => {
+  const {SUPABASE_ANON_KEY, SUPABASE_URL} = process.env;
+
+  return {
+    props: {
+      SUPABASE_ANON_KEY, SUPABASE_URL
+    }
+  };
+};
+
+
+export default function ChatPage( {SUPABASE_ANON_KEY, SUPABASE_URL} ) {
+  const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   const [message, setMessage] = React.useState('');
   const [messageList, setMessageList] = React.useState([]);
   const router = useRouter();
   const username = router.query.username ? router.query.username : '';
 
+  React.useEffect(() => {
+    supabaseClient
+      .from('messages')
+      .select('*')
+      .order('id', {ascending: false})
+      .then(( {data} ) => {
+        setMessageList(data);
+      });
+  }, []);
+
   
   function handleNewMessage(newMessage) {
     const messageObject = {
-      id: messageList.length + 1,
       from: username,
-      messageText: newMessage,
-      deleted: 0
-    }
-    setMessageList([
-      messageObject,
-      ...messageList      
-    ])
+      messageText: newMessage
+    };
+    
+    supabaseClient
+      .from('messages')
+      .insert([
+        messageObject
+      ])
+      .then(({ data }) => {
+        console.log('Criando mensagem', response);
+        setMessageList([
+          data[0],
+          ...messageList      
+        ])
+      })
+    
     setMessage('');
   }
 
