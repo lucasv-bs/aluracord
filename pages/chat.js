@@ -3,22 +3,22 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js';
+import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
+
+const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 
-export const getServerSideProps = async () => {
-  const {SUPABASE_ANON_KEY, SUPABASE_URL} = process.env;
+function messageListener(addMessage) {
+  return supabaseClient
+    .from('messages')
+    .on('INSERT', (liveResponse) => {
+      addMessage(liveResponse.new)
+    })
+    .subscribe();
+}
 
-  return {
-    props: {
-      SUPABASE_ANON_KEY, SUPABASE_URL
-    }
-  };
-};
 
-
-export default function ChatPage( {SUPABASE_ANON_KEY, SUPABASE_URL} ) {
-  const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+export default function ChatPage() {  
   const [message, setMessage] = React.useState('');
   const [messageList, setMessageList] = React.useState([]);
   const router = useRouter();
@@ -32,6 +32,15 @@ export default function ChatPage( {SUPABASE_ANON_KEY, SUPABASE_URL} ) {
       .then(( {data} ) => {
         setMessageList(data);
       });
+      
+    messageListener((newMessage) => {
+      setMessageList((actualMessageList) => {
+        return [
+          newMessage,
+          ...actualMessageList
+        ];
+      })
+    });
   }, []);
 
   
@@ -46,13 +55,7 @@ export default function ChatPage( {SUPABASE_ANON_KEY, SUPABASE_URL} ) {
       .insert([
         messageObject
       ])
-      .then(({ data }) => {
-        console.log('Criando mensagem', response);
-        setMessageList([
-          data[0],
-          ...messageList      
-        ])
-      })
+      .then(({ data }) => {})
     
     setMessage('');
   }
@@ -143,6 +146,11 @@ export default function ChatPage( {SUPABASE_ANON_KEY, SUPABASE_URL} ) {
                               resize: 'none',
                               width: '100%',
                           }}
+                      />
+                      <ButtonSendSticker
+                        onStickerClick={(sticker) => {
+                          handleNewMessage(`:sticker: ${sticker}`);
+                        }}
                       />
                   </Box>
               </Box>
@@ -251,7 +259,21 @@ function MessageList(props) {
                             {(new Date().toLocaleDateString())}
                         </Text>
                     </Box>
-                    {message.messageText}
+                    {
+                      message.messageText.startsWith(':sticker:')
+                        ? (
+                            <Image
+                              src={message.messageText.replace(':sticker:','')}
+                              styleSheet={{
+                                maxWidth: '75px',
+                                height: 'auto',
+                              }}
+                            />
+                        )
+                        : (
+                            message.messageText
+                        )
+                    }                    
                   </Box>
                   <Text                     
                     onClick={() => {handleDeleteMessage(message.id)}}
@@ -268,7 +290,6 @@ function MessageList(props) {
                       width: '35px',
                       height: '35px',
                       hover: {
-                        // color: appConfig.theme.colors.futuristic['001'],
                         backgroundColor: appConfig.theme.colors.futuristic['011'],
                       }
                     }}
